@@ -1,18 +1,12 @@
-rtl8822bu for linux
-===================
+# RTL8812BU / RTL8822BU driver for Linux
 
-rtl8822bu linux driver for combined abgn/bluetooth device
-This is a driver for the wireless part **only**
+This is a Linux driver for Realtek RTL8812BU / RTL8822BU based devices. This is a driver for the wireless part *only* (no Bluetooth).
 
-For the USB3 issue read at the end  
+This driver is known to support Linksys WUSB6400M (based on RTL8812BU?).
 
-<u>If one USB-ID is missing, please mail me.</u>  
+## Building
 
-build/load/function tested with v4.19  
-
-
-Building and installing with DKMS
----------------------------------
+Build and install (requires `dkms`):
 
 ```sh
 sudo make -f Makefile.dkms install
@@ -24,35 +18,14 @@ Uninstall:
 sudo make -f Makefile.dkms uninstall
 ```
 
+## Loading the driver
 
-Building and install driver
----------------------------
+Reboot your system, or if you're impatient:
 
-for building type  
-`make`  
+```sh
+sudo modprobe -a rtl8822bu
+```
 
-for load the driver  
-`sudo modprobe cfg80211`  
-`sudo insmod rtl8822bu.ko`  
+## Credits
 
-
-You need to install the needed fw with  
-`sudo make installfw`  
-
-If you need to crosscompile use  
-`ARCH= CROSS_COMPILE= KSRC=`  
-while calling `make` i.e.  
-
-`make ARCH="arm" CROSS_COMPILE=armv5tel-softfloat-linux-gnueabi- KSRC=/home/linux-master modules`  
-
-USB3 Mode Issue
----------------
-Realtek aka the chipdesigner does some **stupid** idea to switch into USB3 mode via special efuse read/write.  
-And this check is changed compare to the rtl8821au/rtl8814au devices  
-Will check for this and enable USB3
-
-Please use prefix **rtl8822bu** if you want to mail me  
-But please please don't, I have enough to do.  
-TIA  
-
-Hans Ulli Kroll <ulli.kroll@googlemail.com>
+This is a fork of [ulli-kroll/rtl8822bu](https://github.com/ulli-kroll/rtl8822bu), by Hans Ulli Kroll.
