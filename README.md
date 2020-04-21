@@ -11,6 +11,20 @@ For the USB3 issue read at the end
 build/load/function tested with v4.19  
 
 
+Building and installing with DKMS
+---------------------------------
+
+```sh
+sudo make -f Makefile.dkms install
+```
+
+Uninstall:
+
+```sh
+sudo make -f Makefile.dkms uninstall
+```
+
+
 Building and install driver
 ---------------------------
 

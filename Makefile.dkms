@@ -1,0 +1,34 @@
+DKMS := dkms
+modname := rtl8822bu
+modver := 5.2.4-1
+
+# Directory in which generated files are stored.
+DKMS_DEST := /usr/src/$(modname)-$(modver)
+
+# Directory in which the firmware is stored.
+FW_DEST := /lib/firmware/rtlwifi
+
+all: install
+
+src_install:
+	make clean
+	mkdir -p '$(DKMS_DEST)'
+	cp -r Kconfig Makefile.dkms Makefile core firmware hal include os_dep '$(DKMS_DEST)/'
+	sed 's/#MODULE_VERSION#/$(modver)/' dkms.conf > '$(DKMS_DEST)/dkms.conf'
+
+fw_install:
+	mkdir -p '$(FW_DEST)'
+	cp -n firmware/rtl8822bufw.bin '$(FW_DEST)/'
+
+build: src_install fw_install
+	$(DKMS) add -m $(modname) -v $(modver) 2>/dev/null || true
+	$(DKMS) build -m $(modname) -v $(modver)
+
+install: build
+	$(DKMS) install -m $(modname) -v $(modver)
+
+uninstall:
+	$(DKMS) remove -m $(modname) -v $(modver) --all
+	rm -f '$(FW_DEST)/rtl8822bufw.bin'
+
+.PHONY: all src_install fw_install build install uninstall
